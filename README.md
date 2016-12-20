@@ -25,6 +25,9 @@
 </build>
 ````
 2. 执行构建并部署
+````
+mvn clean package ssh-deploy:run
+````
 
 目前支持2种指令
 - status
