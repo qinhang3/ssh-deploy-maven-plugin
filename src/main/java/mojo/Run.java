@@ -12,6 +12,7 @@ import util.SSHUtil;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -70,6 +71,12 @@ public class Run extends AbstractMojo {
                 getLog().info(s);
             }
 
+            //tail log
+            Iterator<String> tail = sshUtil.tail(String.format("%s/logs/catalina.out", tomcatHome), ".*Server startup in [0-9]+ ms.*");
+            while(tail.hasNext()){
+                getLog().info(tail.next());
+            }
+            sshUtil.stop();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -101,6 +108,18 @@ public class Run extends AbstractMojo {
         }
         getLog().info("FIND WAR FILE SUCCESS.PATH = " + wars[0].getAbsolutePath());
         return wars[0];
+    }
+
+    public static void main(String[] args) throws Exception {
+//        String output = "20-Dec-2016 10:44:20.316 信息 [main] org.apache.catalina.startup.Catalina.start Server startup in 14155 ms";
+//        System.out.println(output.matches(".*Server startup in [0-9]+ ms.*"));
+        SSHUtil sshUtil = new SSHUtil("root","10.66.48.169",22,"admin123");
+        // Server startup in 14155 ms
+        Iterator<String> out = sshUtil.tail("/root/download/tomcat_item/logs/catalina.out", ".*Server startup in [0-9]+ ms.*");
+        while(out.hasNext()){
+            System.out.println(out.next());
+        }
+        sshUtil.stop();
     }
 
 }
