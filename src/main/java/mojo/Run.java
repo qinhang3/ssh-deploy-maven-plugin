@@ -65,6 +65,7 @@ public class Run extends AbstractMojo {
             getLog().info("UPLOAD FINISH. COST TIME = " + ((System.currentTimeMillis() - start)) + " MS");
 
             //start
+            sshUtil.exec("source /etc/profile");
             List<String> startResult = sshUtil.exec(tomcatHome + "/bin/startup.sh");
             getLog().info("START FINISH.OUTPUT");
             for (String s : startResult) {
