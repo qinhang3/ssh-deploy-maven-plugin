@@ -56,7 +56,7 @@ public class SSHUtil {
 
     public Iterator<String> tail(String file, String endExp) throws JSchException, IOException {
         ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
-        channelExec.setCommand(String.format("tail -5f %s",file));
+        channelExec.setCommand(String.format("tail -0f %s",file));
         channelExec.connect();
 
         InputStream in = channelExec.getInputStream();
